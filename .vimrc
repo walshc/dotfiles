@@ -424,6 +424,7 @@ au BufEnter *.R imap ,p <Esc>:let @+ = 'setwd("' . getcwd() . '")'<cr>i
 au BufEnter *.R let g:airline#extensions#tabline#enabled = 1
 au BufEnter *.R set formatoptions+=r
 au BufEnter *.R call LongLineGuide()
+au BufNewFile *.R 0r ~/Dropbox/.dotties/R-template
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Rd-specific settings
@@ -485,6 +486,7 @@ au BufEnter *.Rnw map ,u :call KnitrUncomment()<cr>:noh<CR>
 au BufEnter *.Rnw call LongLineGuide()
 au BufEnter *.Rnw set tw=79
 au BufEnter *.Rnw set shiftwidth=2
+au BufNewFile *.Rnw 0r ~/Dropbox/.dotties/Rnw-template
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " BASH-specific options
