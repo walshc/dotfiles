@@ -3,14 +3,14 @@
 ! URxvt
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 URxvt.letterSpace: -1
-URxvt*font: xft:Inconsolata:size=16,xft:Inconsolata for Powerline:size=16
-URxvt*boldFont: xft:Inconsolata:size=16:bold,xft:Inconsolata for Powerline:size=16:bold
-URxvt*italicFont: xft:Inconsolata:size=16:italic,xft:Inconsolata for Powerline:size=16:italic
-URxvt*bolditalicFont: xft:Inconsolata:size=16:bolditalic,xft:Inconsolata for Powerline:size=16:bolditalic
-!URxvt*font: xft:Inconsolata:size=20,xft:Inconsolata for Powerline:size=20
-!URxvt*boldFont: xft:Inconsolata:size=20:bold,xft:Inconsolata for Powerline:size=20:bold
-!URxvt*italicFont: xft:Inconsolata:size=20:italic,xft:Inconsolata for Powerline:size=20:italic
-!URxvt*bolditalicFont: xft:Inconsolata:size=20:bolditalic,xft:Inconsolata for Powerline:size=20:bolditalic
+!URxvt*font: xft:Inconsolata:size=16,xft:Inconsolata for Powerline:size=16
+!URxvt*boldFont: xft:Inconsolata:size=16:bold,xft:Inconsolata for Powerline:size=16:bold
+!URxvt*italicFont: xft:Inconsolata:size=16:italic,xft:Inconsolata for Powerline:size=16:italic
+!URxvt*bolditalicFont: xft:Inconsolata:size=16:bolditalic,xft:Inconsolata for Powerline:size=16:bolditalic
+URxvt*font: xft:Inconsolata:size=20,xft:Inconsolata for Powerline:size=20
+URxvt*boldFont: xft:Inconsolata:size=20:bold,xft:Inconsolata for Powerline:size=20:bold
+URxvt*italicFont: xft:Inconsolata:size=20:italic,xft:Inconsolata for Powerline:size=20:italic
+URxvt*bolditalicFont: xft:Inconsolata:size=20:bolditalic,xft:Inconsolata for Powerline:size=20:bolditalic
 URxvt.urlLauncher: /usr/bin/iceweasel
 URxvt.matcher.button: 1
 URxvt*geometry: 85x24
