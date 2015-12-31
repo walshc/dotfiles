@@ -24,6 +24,7 @@ Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Plugin 'bling/vim-airline'
 Plugin 'bling/vim-bufferline'
 Plugin 'tpope/vim-commentary'
+Bundle 'croaky/vim-colors-github'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'octol/vim-cpp-enhanced-highlight'
@@ -35,6 +36,7 @@ Plugin 'gerw/vim-latex-suite'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'xolox/vim-misc'
 Plugin 'sickill/vim-monokai'
+Plugin 'jpo/vim-railscasts-theme'
 Plugin 'mhinz/vim-startify'
 Plugin 'matthewtodd/vim-twilight'
 Plugin 'gmarik/Vundle.vim'
@@ -313,7 +315,7 @@ noremap <F5> :NERDTreeToggle<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Toggle between colorschemes with Ctrl+F8 and Shift+F8:
 let g:colorscheme_switcher_define_mappings=0
-map <C-F8> :NextColorScheme<CR>
+map <S-F9> :NextColorScheme<CR>
 map <S-F8> :PrevColorScheme<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

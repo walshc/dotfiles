@@ -109,7 +109,7 @@ if [ "$HOSTNAME" = lenovo ] | [ "$HOSTNAME" = acer ]; then
 fi
 
 if [ "$HOSTNAME" = scc1 ]; then
-  alias R3='/usr3/graduate/walshcb/.local/R-3.2.2/bin/R -q';
+  alias R3='/usr3/graduate/walshcb/.local/R-3.2.3/bin/R -q';
   alias splat='/usr3/graduate/walshcb/.local/bin/splat';
   alias splat-hd='/usr3/graduate/walshcb/.local/bin/splat-hd';
 fi
@@ -134,6 +134,7 @@ elif [[ $HOSTNAME == acer ]]; then
     alias monitor-only='xrandr --auto; xrandr --output HDMI1 --mode 1920x1080 \
          --output LVDS1 --off'
     alias dual-display='xrandr --output HDMI1 --primary --mode 1920x1080 --left-of LVDS1 --output LVDS1 --mode 1366x768'
+    alias dual-display-vga='xrandr --output VGA1 --primary --mode 1024x768 --left-of LVDS1 --output LVDS1 --mode 1366x768'
 fi
 # Shortcut to change font size in urxvt, handy when switching between monitor and laptop:
 alias large-urxvt-font="sed -i -e '6,9s/^/!/g' ~/.Xdefaults -e '10,13s/!//g'"
