@@ -1,8 +1,9 @@
-""" For the plugins, first run the command below:
+"" For the plugins, first run the command below:
 " git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 " Then open vim and type:
 " :PluginInstall
 
+let hostname = substitute(system('hostname'), '\n', '', '')
 set encoding=utf-8
 set rtp+=$HOME/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -10,7 +11,7 @@ Plugin 'chriskempson/base16-vim'
 Plugin 'itchyny/calendar.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'morhetz/gruvbox'
-Plugin 'Yggdroot/indentLine'
+" Plugin 'Yggdroot/indentLine'
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-scripts/mayansmoke'
 Plugin 'tomasr/molokai'
@@ -21,26 +22,33 @@ Plugin 'edkolev/promptline.vim'
 Plugin 'ervandew/supertab'
 Plugin 'godlygeek/tabular'
 Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bling/vim-bufferline'
 Plugin 'tpope/vim-commentary'
 Bundle 'croaky/vim-colors-github'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'easymotion/vim-easymotion'
+Plugin 'junegunn/vim-easy-align'
+" Plugin 'easymotion/vim-easymotion'
 Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
+Plugin 'nathanaelkane/vim-indent-guides'
+" Plugin 'airblade/vim-gitgutter'
 Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'gerw/vim-latex-suite'
 Plugin 'plasticboy/vim-markdown'
-Plugin 'xolox/vim-misc'
 Plugin 'sickill/vim-monokai'
 Plugin 'jpo/vim-railscasts-theme'
+Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'tpope/vim-surround'
 Plugin 'mhinz/vim-startify'
 Plugin 'matthewtodd/vim-twilight'
 Plugin 'gmarik/Vundle.vim'
 Plugin 'jnurmine/Zenburn'
+if hostname != "scc1"
+  Plugin 'xolox/vim-colorscheme-switcher'
+  Plugin 'xolox/vim-misc'
+endif
 call vundle#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -57,7 +65,7 @@ set shellslash
 set grepprg=grep\ -nH\ $*
 set smartcase
 set wrapscan
-set hls
+set nohlsearch
 
 set laststatus=2
 set mouse=a
@@ -150,6 +158,21 @@ set noshowmode
 " Some settings to make vim behave like a conventional text editor
 nmap <c-s> :w<CR>
 imap <c-s> <Esc>:w<CR>i
+noremap <expr> <Home> (col('.') == matchend(getline('.'), '^\s*')+1 ? '0' : '^')
+noremap <expr> <End> (col('.') == match(getline('.'), '\s*$') ? '$' : 'g_')
+vnoremap <expr> <End> (col('.') == match(getline('.'), '\s*$') ? '$h' : 'g_')
+imap <Home> <C-o><Home>
+imap <End> <C-o><End>
+
+
+" Some emacs functionality in insert mode:
+imap <C-b> <Left>
+imap <C-f> <Right>
+imap <c-a> <Esc>^i
+imap <c-e> <Esc>$i
+imap <C-d> <Del>
+imap <C-h> <BS>
+imap <C-k> <Esc>ld$i
 
 " For some filetypes you want a warnign for when you go over 80 characters:
 function! LongLineGuide()
@@ -170,7 +193,6 @@ hi normal ctermbg=none
 
 " Make the comments italic except not on the BU cluster because it doesn't
 " work there:
-let hostname = substitute(system('hostname'), '\n', '', '')
 if hostname != "scc1"
   highlight Comment cterm=italic
 endif
@@ -195,26 +217,44 @@ let g:airline_section_c                    = '%f'
 let g:airline_section_y                    = '%{bufnr("%")}'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-easy-align
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-easymotion
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
+"let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
 " Bi-directional find motion
 " Jump to anywhere you want with minimal keystrokes, with just one key binding.
 " `s{char}{label}`
-nmap s <Plug>(easymotion-s)
+"nmap s <Plug>(easymotion-s)
 " or
 " `s{char}{char}{label}`
 " Need one more keystroke, but on average, it may be more comfortable.
-nmap s <Plug>(easymotion-s2)
+"nmap s <Plug>(easymotion-s2)
 
 " Turn on case insensitive feature
-let g:EasyMotion_smartcase = 1
+"let g:EasyMotion_smartcase = 1
 
 " JK motions: Line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+"map <Leader>j <Plug>(easymotion-j)
+"map <Leader>k <Plug>(easymotion-k)
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-indent-guides
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+hi IndentGuidesOdd  ctermbg=blue
+hi IndentGuidesEven ctermbg=green
+let g:indent_guides_color_change_percent = 2
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-latex-suite
@@ -368,6 +408,9 @@ let g:cpp_class_scope_highlight = 1
 au BufEnter *.cpp set shiftwidth=2
 au BufEnter *.cpp let g:airline#extensions#tabline#enabled = 1
 au BufEnter *.cpp call LongLineGuide()
+au BufEnter *.h set shiftwidth=2
+au BufEnter *.h let g:airline#extensions#tabline#enabled = 1
+au BufEnter *.h call LongLineGuide()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Stata-specific settings
@@ -388,8 +431,8 @@ au BufEnter *.html set shiftwidth=2
 au BufEnter *.md set ft=markdown
 au BufEnter *.md map  <F2> <Esc>:w<cr>:!  markdown % > %:r.html<cr><cr>
 au BufEnter *.md imap <F2> <Esc>:w<cr>:!  markdown % > %:r.html<cr><cr>
-au BufEnter *.md imap <F3> <Esc>:!nohup evince %:r.pdf & <CR><CR>
-au BufEnter *.md  map <F3> <Esc>:!nohup evince %:r.pdf & <CR><CR>
+au BufEnter *.md imap <F3> <Esc>:!nohup evince %:r.pdf &<CR><CR>
+au BufEnter *.md  map <F3> <Esc>:!nohup evince %:r.pdf &<CR><CR>
 au BufEnter *.md map  <F9> <Esc>:w<cr>:!  pandoc -S % -o  %:r.pdf<cr><cr>
 au BufEnter *.md imap <F9> <Esc>:w<cr>:!  pandoc -S % -o  %:r.pdf<cr><cr>
 au BufEnter *.md map  <F10> <Esc>:w<cr>:! markdown-pdf % -o  %:r.pdf<cr><cr>
@@ -505,9 +548,8 @@ au BufEnter *.tex imap <F2> <Esc>:w<cr><leader>ll
 au BufEnter *.tex  map <F2> <Esc>:w<cr><leader>ll
 au BufEnter *.tex imap <F1> <Esc>
 au BufEnter *.tex  map <F1> <Esc>
-au BufEnter *.tex imap <F3> <Esc>:!nohup evince %:r.pdf & <CR><CR>i
-au BufEnter *.tex  map <F3> <Esc>:!nohup evince %:r.pdf & <CR><CR>
-
+au BufEnter *.tex imap <F3> <Esc>:!nohup evince %:r.pdf >/dev/null &<CR><CR>i
+au BufEnter *.tex  map <F3> <Esc>:!nohup evince %:r.pdf >/dev/null &<CR><CR>
 " Navigate up through wrapped lines
 au BufEnter *.tex nmap j gj
 au BufEnter *.tex nmap k gk
@@ -523,10 +565,26 @@ if has("gui_running")
   if has("win32") || has("win16")
     set guifont=Consolas:h14
   else
+    "set guifont=Liberation\ Mono\ 14
     set guifont=Inconsolata\ for\ Powerline\ 16
   endif
+  "set bg=light
+  colorscheme github
+  let g:airline_theme = 'base16'
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
+endif
+
+let emulator=substitute(system('echo $EMULATOR'), '\n', '', '')
+if emulator == "gnome-terminal-server"
+  colorscheme Tomorrow
+  set bg=light
+  let g:airline_theme = 'tomorrow'
+endif
+if emulator == "xfce4-terminal"
+  set bg=light
+  colorscheme Tomorrow
+  let g:airline_theme = 'tomorrow'
 endif

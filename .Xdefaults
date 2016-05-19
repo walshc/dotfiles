@@ -3,15 +3,15 @@
 ! URxvt
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 URxvt.letterSpace: -1
-!URxvt*font: xft:Inconsolata:size=16,xft:Inconsolata for Powerline:size=16
-!URxvt*boldFont: xft:Inconsolata:size=16:bold,xft:Inconsolata for Powerline:size=16:bold
-!URxvt*italicFont: xft:Inconsolata:size=16:italic,xft:Inconsolata for Powerline:size=16:italic
-!URxvt*bolditalicFont: xft:Inconsolata:size=16:bolditalic,xft:Inconsolata for Powerline:size=16:bolditalic
-URxvt*font: xft:Inconsolata:size=20,xft:Inconsolata for Powerline:size=20
-URxvt*boldFont: xft:Inconsolata:size=20:bold,xft:Inconsolata for Powerline:size=20:bold
-URxvt*italicFont: xft:Inconsolata:size=20:italic,xft:Inconsolata for Powerline:size=20:italic
-URxvt*bolditalicFont: xft:Inconsolata:size=20:bolditalic,xft:Inconsolata for Powerline:size=20:bolditalic
-URxvt.urlLauncher: /usr/bin/iceweasel
+URxvt*font: xft:Inconsolata:size=16,xft:Inconsolata for Powerline:size=16
+URxvt*boldFont: xft:Inconsolata:size=16:bold,xft:Inconsolata for Powerline:size=16:bold
+URxvt*italicFont: xft:Inconsolata:size=16:italic,xft:Inconsolata for Powerline:size=16:italic
+URxvt*bolditalicFont: xft:Inconsolata:size=16:bolditalic,xft:Inconsolata for Powerline:size=16:bolditalic
+!URxvt*font: xft:Inconsolata:size=20,xft:Inconsolata for Powerline:size=20
+!URxvt*boldFont: xft:Inconsolata:size=20:bold,xft:Inconsolata for Powerline:size=20:bold
+!URxvt*italicFont: xft:Inconsolata:size=20:italic,xft:Inconsolata for Powerline:size=20:italic
+!URxvt*bolditalicFont: xft:Inconsolata:size=20:bolditalic,xft:Inconsolata for Powerline:size=20:bolditalic
+URxvt.urlLauncher: /usr/bin/firefox
 URxvt.matcher.button: 1
 URxvt*geometry: 85x24
 URxvt*scrollBar: false
@@ -24,7 +24,8 @@ URxvt.keysym.Shift-F11: perl:fullscreen:switch
 URxvt.iso14755: False
 urxvt*blurRadius: 50
 URxvt.depth: 32
-URxvt.background: [80]#2d2d2d
+URxvt.background: [85]#2d2d2d
+URxvt*iconFile: /usr/share/icons/Numix-Circle/48x48/apps/Terminal.svg
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Tomorrow Night Eighties Colorscheme
