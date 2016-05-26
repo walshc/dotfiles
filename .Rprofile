@@ -38,10 +38,10 @@ invisible(Sys.setlocale("LC_ALL", "C"))
     tryCatch(source(x, ...),
              error = function(e) {
                system(paste0("notify-send -t 1000 ",
-                             "-i ~/.icons/Numix-Circle/48x48/apps/rstudio.svg",
+                             "-i /usr/share/icons/Numix-Circle/48x48/apps/rstudio.svg",
                              " 'Error in R script'"))})
     system(paste0("notify-send -t 1000 ",
-                  "-i ~/.icons/Numix-Circle/48x48/apps/rstudio.svg",
+                  "-i /usr/share/icons/Numix-Circle/48x48/apps/rstudio.svg",
                   " 'R script complete'"))
   } else {
     stop("'notify = TRUE' not available")
@@ -314,49 +314,6 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   df <- df[!duplicated(df$n),]
   structure(df$m, info = data.frame(visible = df$visible, from = df$from),
             class = "MethodsFunction")
-}
-
-
-.env$geocodeAddress <- function(address) {
-  require(RJSONIO)
-  if (!require(RJSONIO)) {
-    msg = "Function requires package RJSONIO. Install (y/n)?"
-    user.input <- readline(prompt = msg)
-    if (user.input == "y") {
-      install.packages("RJSONIO")
-    } else {
-      stop("Installation of package RJSONIO required.")
-    }
-  }
-  root_url  <- "http://maps.google.com/maps/api/geocode/json?address="
-  url <- URLencode(paste(root_url, address, "&sensor=false", sep = ""))
-  x <- fromJSON(url, simplify = FALSE)
-  out <- list()
-  if (x$status == "OK") {
-    # Centroid coordinates of first search result:
-    out$lon <- x$results[[1]]$geometry$location$lng
-    out$lat <- x$results[[1]]$geometry$location$lat
-    # Address of first search result (for checking):
-    out$adr1 <- paste(unlist(x$results[[1]]$address_components[[1]]),
-                      collapse = ", ")
-    adr.length <- length(x$results[[1]]$address_components)
-    if (adr.length >= 2) {
-    out$adr2 <- paste(unlist(x$results[[1]]$address_components[[2]]),
-                      collapse = ", ")
-    } else {
-      out$adr2 <- NA
-    }
-    if (adr.length >= 3) {
-    out$adr3 <- paste(unlist(x$results[[1]]$address_components[[3]]),
-                      collapse = ", ")
-    } else {
-      out$adr3 <- NA
-    }
-  } else {
-    out <- NA
-  }
-  Sys.sleep(0.25)  # API only allows 5 requests per second
-  out
 }
 
 .env$convertExcelDate <- function(x) {

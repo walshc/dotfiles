@@ -3,7 +3,6 @@
 # Install oh-my-zsh first from https://github.com/robbyrussell/oh-my-zsh
 export ZSH=~/.oh-my-zsh
 source $ZSH/oh-my-zsh.sh
-DISABLE_UPDATE_PROMPT=true
 plugins=(git)
 stty -ixon
 
@@ -11,16 +10,15 @@ stty -ixon
 export HISTSIZE=1000000000
 export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+export LANG=ga_IE.UTF-8
+export LC_ALL=ga_IE.UTF-8
 export TERM='xterm-256color'
-export BROWSER='iceweasel'
+export BROWSER='firefox'
 export R_HISTFILE=~/.Rhistory
 export WINEARCH=win64
-export CHROME_REMOTE_DESKTOP_DEFAULT_DESKTOP_SIZES=1920x1080
 export EMULATOR=`basename "/"$(ps -f -p $(cat /proc/$(echo $$)/stat | cut -d \  -f 4) | tail -1 | sed 's/^.* //')`
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
-export VLC_PLUGIN_PATH=/usr/lib/vlc/plugins
+export VLC_PLUGIN_PATH="/usr/lib/vlc/plugins:$VLC_PLUGIN_PATH"
 export M2_HOME=/opt/apache-maven-3.3.9
 export R_LIBS="$HOME/.local/lib64/R/x86_64-pc-linux-gnu-library/3.2"
 export R_LIBS_USER="$HOME/.local/lib64/R/x86_64-pc-linux-gnu-library/3.2"
@@ -94,19 +92,10 @@ alias kilall='killall'
 alias sl='sl -e'
 alias help='man'
 
-# SSH Shortcuts:
-alias pbu='sftp walshcb@people.bu.edu'
-alias pi='ssh osmc@192.168.0.107 -X'
-alias pi2='ssh pi@192.168.0.106 -X'
-alias sftpbu='sftp walshcb@people.bu.edu'
-
-# Connect to the BU VPN easier:
-alias vpn='sudo openconnect vpn.bu.edu -u walshcb'
-
 # Power management:
 alias shutdown='sudo shutdown -h now'
-alias lock-and-suspend='/home/christoph/.i3/suspend-and-lock'
-alias lock-screen='/home/christoph/.i3/blurred-lock'
+alias lock-and-suspend='~/.i3/suspend-and-lock'
+alias lock-screen='~/.i3/blurred-lock'
 alias turn-off-screen='xset dpms force off'
 
 # Shortcuts to open apps:
@@ -169,6 +158,7 @@ elif [[ $HOSTNAME == m73 ]]; then
    alias monitor-only='xrandr --output HDMI1 --mode 1920x1080 \
            --output VGA1 --off'
 fi
+
 # Shortcut to change font size in urxvt, handy when switching between monitor and laptop:
 alias large-urxvt-font="sed -i -e '6,9s/^/!/g' ~/.Xdefaults -e '10,13s/!//g'"
 alias small-urxvt-font="sed -i -e '6,9s/!//g' ~/.Xdefaults -e '10,13s/^/!/g'"
@@ -189,6 +179,8 @@ alias mount-windows='sudo mount -t ntfs -o nls=utf8,umask=0222 /dev/sda4 /media/
 alias hs='herbstclient spawn'
 alias fullscreen-urxvt='wmctrl -r :ACTIVE: -b toggle,fullscreen'
 alias start-dropbox='nohup ~/.dropbox-dist/dropboxd >&/dev/null'
+
+source ~/.private-aliases
 
 ###############################################################################
 # Functions
@@ -228,19 +220,16 @@ function qsub_parallel_job() {
   qsub -P econdept -pe omp 12 -cwd -m beas -N $jobname $1
 }
 
-function aoe2() {
-  cd "/home/christoph/Documents/Age2HD The Forgotten 3.2 LAN Version/Age2HD The Forgotten 3.2 LAN Version"
-  WINEARCH=win32
-  wine SmartSteamLoader.exe
-  cd
-}
-
 function weather() {
   curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml"
 }
 
 function calc() {
   R --vanilla --slave -e $1
+}
+
+function texToHTML() {
+  htlatex $1 "ht5mjlatex.cfg, charset=utf-8" " -cunihtf -utf8"
 }
 
 ###############################################################################

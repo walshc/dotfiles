@@ -1,0 +1,36 @@
+\documentclass[10pt]{article}
+\usepackage[margin = 1in]{geometry}
+\usepackage[usenames, dvipsnames, svgnames, table]{xcolor}
+\usepackage{amsmath, amssymb, bbm, color, hyperref, listings, parskip, setspace,
+            units, verbatim}
+\hypersetup{colorlinks = true,
+            citecolor  = NavyBlue,
+            linkcolor  = NavyBlue}
+\usepackage[round]{natbib}
+\onehalfspacing
+\usepackage{libertine}
+\usepackage{inconsolata}
+\usepackage[libertine]{newtxmath}
+\usepackage[T1]{fontenc}
+
+\title{}
+\author{Christoph Walsh}
+\begin{document}
+\maketitle
+<<setup, include = FALSE>>=
+library(knitr)
+opts_knit$set(root.dir = normalizePath("."), fig.align = "center",
+              fig.show = "hold", fig.keep = "none")
+opts_chunk$set(tidy = FALSE, cache = TRUE,
+               cache.path = "cache/", autodep = TRUE, fig.path = "figures/",
+               fig.align = "center")
+options(formatR.arrow = TRUE, width = 80)
+clearCache <- function(figures = FALSE) {
+  system("rm -f cache/*")
+  if (figures) {
+    system("rm -f figures/*")
+  }
+}
+# clearCache(figures = TRUE)  # uncomment to clear cache
+@
+\end{document}
