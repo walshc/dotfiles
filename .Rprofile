@@ -3,9 +3,8 @@
 
 # Save command history even if not saving workspace:
 .Last <- function() {
-  if (!any(commandArgs() == '--no-readline') && interactive()){
-          require(utils)
-          try(savehistory(Sys.getenv("R_HISTFILE")))
+  if (interactive()) {
+    try(utils::savehistory(Sys.getenv("R_HISTFILE")))
   }
 }
 Sys.setenv(R_HISTSIZE='100000')
@@ -326,6 +325,22 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   hcl(h = hues, l = 65, c = 100)[1:n]
 }
 
+.env$viewHEXcolours <- function(x) {
+  require(ggplot2)
+  x <- unique(x)
+  ncol <- floor(sqrt(length(x)))
+  nrow <- ceiling(length(x) / ncol)
+  df <- data.frame(expand.grid(list(x = 1:nrow, y = 1:ncol)))
+  df <- df[order(- df$y, df$x), ]
+  df$cols <- factor(c(rep(NA, ncol * nrow - length(x)), x),
+                    levels = x)
+  g <- ggplot(df, aes(x, y)) + geom_tile(aes(fill = cols)) +
+    scale_fill_manual(values = levels(df$cols), name = "Colours") +
+    theme(axis.text = element_blank(), axis.ticks = element_blank(),
+          axis.title = element_blank(), panel.background = element_blank())
+  return(g)
+}
+
 attach(.env)
 
 # Load up some libraries quietly and set the colorscheme:
@@ -339,7 +354,8 @@ if (interactive() & (grepl("xterm", .term))) {
   if ((.emulator == "gnome-terminal-server") | (.emulator == "xfce4-terminal")) {
     solarizedLight()
   } else {
-    tomorrowNightEighties()
+    #tomorrowNightEighties()
+    solarizedLight()
   }
 }
 
@@ -382,25 +398,4 @@ for (i in welcome) {
 }
 cat("\n")
 rm(welcome, welcome.chars, i)
-
-# cat("
-#             IIIIIIIIIIIII77$$            
-#        II??+I7II??????II???I77$Z        
-#     ???=$$7?~=?I$ZO88888OOZZ$$7I7ZZ     
-#    ??:Z7+:~+Z8D8              OZ$7$Z    
-#  ??,Z7+,~I8N   IIIIIIIIIIIII77    $7Z8  
-# :?.ZI,,~ON     ?8ZZZZZZZZZZZOD+IZ   7ZO 
-# ?=O7:,~OM      ?8???,????I?+????7O   78 
-# ?:Z?.:ZD       ?8??+$M     Z+7??+Z8   I 
-# I+$+.~ZN       ?8??+$N      ?8??+ZM   I 
-# IIZI.:78       ?8??+$N     ?,Z??=8    Z 
-#  II$?,=Z8      ?8???Z~~~~~,N7?.~DN   ?  
-#   7I7I:=IO     ?8??????????=O8NM    ?$  
-#    $77I?=?7Z   ?8???$D88Z???77=   ?N    
-#      Z$7I?+II7$?8??+$N   $=??O+O?D      
-#        ZZ$$7I?I?8??+$N77II7+???7O       
-#            OOOZ?8??+$NZOO8D7Z????O      
-#                ?8??+$N      IZ????O     
-#                ?????$N      7I?????O\n")
-# Change the prompt from "> " to "R> "
 options(prompt = "R> ")

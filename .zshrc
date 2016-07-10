@@ -3,15 +3,16 @@
 # Install oh-my-zsh first from https://github.com/robbyrussell/oh-my-zsh
 export ZSH=~/.oh-my-zsh
 source $ZSH/oh-my-zsh.sh
-plugins=(git)
+plugins=(debian dircycle dirhistory git last-working-dir pip python sudo \
+        web-search)
 stty -ixon
 
 # Export stuff
 export HISTSIZE=1000000000
 export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
-export LANG=ga_IE.UTF-8
-export LC_ALL=ga_IE.UTF-8
+# export LANG=ga_IE.UTF-8
+# export LC_ALL=ga_IE.UTF-8
 export TERM='xterm-256color'
 export BROWSER='firefox'
 export R_HISTFILE=~/.Rhistory
@@ -74,9 +75,12 @@ alias updates='sudo apt update; sudo apt dist-upgrade -y'
 alias install='sudo apt install'
 alias apt-search='apt search'
 
-# Edit GTK settings easier:
+# Edit config files easier:
 alias gtk2='vim ~/.gtkrc-2.0'
 alias gtk3='vim ~/.config/gtk-3.0/settings.ini'
+alias zshrc='vim ~/.zshrc'
+alias vimrc='vim ~/.vimrc'
+alias Rprofile='vim ~/.Rprofile'
 
 # Don't delete things by accident:
 alias rm='rm -i'
@@ -99,7 +103,9 @@ alias lock-screen='~/.i3/blurred-lock'
 alias turn-off-screen='xset dpms force off'
 
 # Shortcuts to open apps:
+alias open='xdg-open'
 alias tabula='java -Dfile.encoding=utf-8 -Xms256M -Xmx1024M -jar ~/.local/tabula/tabula.jar'
+alias redshift='nohup redshift -l 42.36:-71.06 > /dev/null &'
 alias preview='feh -g 900x600'
 alias bib-database='vim ~/Dropbox/papers/bib.bib'
 alias ncmpcpp='ncmpcpp --config ~/.i3/ncmpcpp.conf'
@@ -160,8 +166,8 @@ elif [[ $HOSTNAME == m73 ]]; then
 fi
 
 # Shortcut to change font size in urxvt, handy when switching between monitor and laptop:
-alias large-urxvt-font="sed -i -e '6,9s/^/!/g' ~/.Xdefaults -e '10,13s/!//g'"
-alias small-urxvt-font="sed -i -e '6,9s/!//g' ~/.Xdefaults -e '10,13s/^/!/g'"
+alias large-urxvt-font="sed -i -e '6,9s/^/!/g' ~/.Xdefaults -e '10,13s/!//g' && xrdb -load ~/.Xdefaults"
+alias small-urxvt-font="sed -i -e '6,9s/!//g' ~/.Xdefaults -e '10,13s/^/!/g' && xrdb -load ~/.Xdefaults"
 alias laptop-1080p='xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --off'
 alias laptop-768p='xrandr --output eDP1 --mode 1360x768 --output HDMI2 --off'
 alias dual-display-1080p='xrandr --output HDMI2 --primary --mode 1920x1080 --left-of eDP1 --output eDP1 --mode 1920x1080'
@@ -171,6 +177,10 @@ alias reading-mode='xrandr --output eDP1 --rotate left'
 alias rgb-screen-saver='eog --slide-show ~/Documents/screenfix'
 alias mod-to-alt="sed -i -e '2s/Mod4/Mod1/g' ~/.i3/config & i3-msg reload"
 alias mod-to-super="sed -i -e '2s/Mod1/Mod4/g' ~/.i3/config & i3-msg reload"
+alias restart-wifi='sudo ifconfig wlan0 down; sudo ifconfig wlan0 up'
+alias random-mac='sudo ifconfig wlan0 down; sudo macchanger wlan0 -r; sudo ifconfig wlan0 up'
+alias touchpad-off='synclient TouchpadOff=1'
+alias touchpad-on='synclient TouchpadOff=0'
 
 # Misc:
 alias cwd='cd .'  # this puts the current directory in ~/.last_dir
@@ -178,7 +188,9 @@ alias rwd='cd `cat ~/.last_dir`'  # go to the directory in ~/.last_dir
 alias mount-windows='sudo mount -t ntfs -o nls=utf8,umask=0222 /dev/sda4 /media/christoph/windows'
 alias hs='herbstclient spawn'
 alias fullscreen-urxvt='wmctrl -r :ACTIVE: -b toggle,fullscreen'
-alias start-dropbox='nohup ~/.dropbox-dist/dropboxd >&/dev/null'
+alias start-dropbox='nohup ~/.dropbox-dist/dropboxd > /dev/null &'
+alias start-icons='nohup python3 ~/.i3/autoname-workspaces.py > /dev/null &'
+alias start-mopidy='nohup mopidy > /dev/null &'
 
 source ~/.private-aliases
 
@@ -204,8 +216,7 @@ function git_prompt_info() {
 
 # Send a file to print at Mugar with "mugar_print file.pdf"
 function mugar_print() {
-  cat $1 | sshpass -f ~/.config/sshpass/.Xpi2 ssh walshcb@scc-lite.bu.edu \
-    lpr -P mugar-ds-staple -J $1
+  cat $1 | ssh walshcb@scc-lite.bu.edu lpr -P mugar-ds-staple -J 'print-job'
 }
 
 # Send a script with qsub with "qsub_job myscript.R"
@@ -232,6 +243,27 @@ function texToHTML() {
   htlatex $1 "ht5mjlatex.cfg, charset=utf-8" " -cunihtf -utf8"
 }
 
+function extract() {
+        if [ -f $1 ]; then
+                case $1 in
+                        *.tar.bz2)   tar xvjf $1     ;;
+                        *.tar.gz)    tar xvzf $1     ;;
+                        *.bz2)       bunzip2 $1      ;;
+                        *.rar)       unrar x $1      ;;
+                        *.gz)        gunzip $1       ;;
+                        *.tar)       tar xvf $1      ;;
+                        *.tbz2)      tar xvjf $1     ;;
+                        *.tgz)       tar xvzf $1     ;;
+                        *.zip)       unzip $1        ;;
+                        *.Z)         uncompress $1   ;;
+                        *.7z)        7z x $1         ;;
+                        *)           echo "'$1' cannot be extracted via >extract<" ;;
+                esac
+        else
+                echo "'$1' is not a valid file!"
+        fi
+}
+
 ###############################################################################
 # Setting the prompt
 ###############################################################################
@@ -241,48 +273,53 @@ function texToHTML() {
 # Shows git repos and changes colors depending on if there are unstaged commits
 # or up to date.
 
-autoload -U add-zsh-hook
-autoload -Uz vcs_info
-
-# Git information:
-zstyle ':vcs_info:*' actionformats \
-       '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats ' %F{2}%s%F{7}:%F{2}(%F{1}%b%F{2})%f '
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-zstyle ':vcs_info:*' enable git
-
-prompt_vcs () {
-  vcs_info
-  if [ "${vcs_info_msg_0_}" = "" ]; then
-    dir_status="$%f"
-  elif [[ $(git diff --cached --name-status 2>/dev/null ) != "" ]]; then
-    dir_status="%F{1}»%f"
-  elif [[ $(git diff --name-status 2>/dev/null ) != "" ]]; then
-    dir_status="%F{3}»%f"
-  else
-    dir_status="%F{2}»%f"
-  fi
-}
-
-add-zsh-hook precmd prompt_vcs
-
-# SSH host information:
-if [[ -n "$SSH_CLIENT" ]]; then
-  PROMPT_HOST="($HOST) "
-elif [[ `whoami` == "root" ]]; then
-  PROMPT_HOST="(root) "
-else
-  PROMPT_HOST=''
-fi
-
-# Finally setting the prompt and colours:
-if [[ $EMULATOR == "urxvt" ]] || [[ $EMULATOR == "85x24" ]]; then
-        PROMPT='${ret_status}%{$fg[green]%}${PROMPT_HOST}%{$fg_bold[green]%}%p%{$fg_bold[yellow]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
-else
-        source ~/.powerline-prompt
-fi
+# autoload -U add-zsh-hook
+# autoload -Uz vcs_info
+# 
+# # Git information:
+# zstyle ':vcs_info:*' actionformats \
+#        '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+# zstyle ':vcs_info:*' formats ' %F{2}%s%F{7}:%F{2}(%F{1}%b%F{2})%f '
+# zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+# zstyle ':vcs_info:*' enable git
+# 
+# prompt_vcs () {
+#   vcs_info
+#   if [ "${vcs_info_msg_0_}" = "" ]; then
+#     dir_status="$%f"
+#   elif [[ $(git diff --cached --name-status 2>/dev/null ) != "" ]]; then
+#     dir_status="%F{1}»%f"
+#   elif [[ $(git diff --name-status 2>/dev/null ) != "" ]]; then
+#     dir_status="%F{3}»%f"
+#   else
+#     dir_status="%F{2}»%f"
+#   fi
+# }
+# 
+# add-zsh-hook precmd prompt_vcs
+# 
+# # SSH host information:
+# if [[ -n "$SSH_CLIENT" ]]; then
+#   PROMPT_HOST="($HOST) "
+# elif [[ `whoami` == "root" ]]; then
+#   PROMPT_HOST="(root) "
+# else
+#   PROMPT_HOST=''
+# fi
+# 
+# # Finally setting the prompt and colours:
+# if [[ $EMULATOR == "urxvt" ]] || [[ $EMULATOR == "85x24" ]]; then
+#         PROMPT='${ret_status}%{$fg[blue]%}${PROMPT_HOST}%{$fg_bold[blue]%}%p%{$fg_bold[blue]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
+# else
+#         source ~/.powerline-prompt
+# fi
+source ~/.powerline-prompt
 
 # Make the caps lock be another button for escape
 setxkbmap -option ctrl:escape
 eval setxkbmap -option caps:escape
 unset GNOME_KEYRING_CONTROL  # turn off gnome keyring
+
+if ! [[ -n "$SSH_CLIENT" ]]; then
+        source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi

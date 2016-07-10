@@ -187,9 +187,9 @@ function! SpellCheck()
 endfunction
 
 " Colorscheme
-colorscheme Tomorrow-Night-Eighties
+"colorscheme Tomorrow-Night-Eighties
 " Get the same background as the terminal emulator (for transparency effects):
-hi normal ctermbg=none
+"hi normal ctermbg=none
 
 " Make the comments italic except not on the BU cluster because it doesn't
 " work there:
@@ -262,7 +262,7 @@ let g:indent_guides_color_change_percent = 2
 
 let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat = 'pdf'
-let g:Tex_CompileRule_pdf = 'latexmk -shell-escape --interaction=nonstopmode --synctex=1 -pdflatex="pdflatex % %S" -pdf $*'
+let g:Tex_CompileRule_pdf = 'latexmk -shell-escape --interaction=nonstopmode --synctex=1 -pdflatex="pdflatex % %S" -pdf $*; latexmk -c %'
 let g:Tex_ViewRule_pdf = 'evince'
 let g:tex_conceal = ""
 let g:Tex_IgnoredWarnings ='
@@ -469,7 +469,7 @@ au BufEnter *.R imap ,p <Esc>:let @+ = 'setwd("' . getcwd() . '")'<cr>i
 au BufEnter *.R let g:airline#extensions#tabline#enabled = 1
 au BufEnter *.R set formatoptions+=r
 au BufEnter *.R call LongLineGuide()
-au BufNewFile *.R 0r ~/Dropbox/.dotties/R-template
+au BufNewFile *.R 0r ~/Dropbox/dotfiles/R-template
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Rd-specific settings
@@ -521,6 +521,7 @@ au BufEnter *.Rnw map  <F11> <Esc>:call ToggleKnitrFiletype()<CR>
 au BufEnter *.Rnw imap <F11> <Esc>:call ToggleKnitrFiletype()<CR>i
 " Knit and compile pdf with latexmk (see .Rprofile for klatex function)
 au BufEnter *.Rnw map  <F10> <Esc>:w<cr>:!R -e 'klatex("%")'<cr>
+
 au BufEnter *.Rnw imap <F10> <Esc>:w<cr>:!R -e 'klatex("%")'<cr><cr>i
 " View pdf with F3:
 au BufEnter *.Rnw map  <F3> <Esc>:!nohup evince %:r.pdf & <cr><cr>
@@ -550,6 +551,8 @@ au BufEnter *.tex imap <F1> <Esc>
 au BufEnter *.tex  map <F1> <Esc>
 au BufEnter *.tex imap <F3> <Esc>:!nohup evince %:r.pdf >/dev/null &<CR><CR>i
 au BufEnter *.tex  map <F3> <Esc>:!nohup evince %:r.pdf >/dev/null &<CR><CR>
+au BufEnter *.tex imap <F10> <Esc>:w<cr>:! xelatex % <cr>
+au BufEnter *.tex  map <F10> :w<cr>:! xelatex % <cr>
 " Navigate up through wrapped lines
 au BufEnter *.tex nmap j gj
 au BufEnter *.tex nmap k gk
@@ -557,6 +560,11 @@ au BufEnter *.tex set shiftwidth=2
 au BufEnter *.tex set tw=79
 au BufEnter *.tex set formatoptions+=t
 "au BufEnter *.tex setlocal spell spelllang=en_us
+
+
+" For makefiles, make sure you use tabs:
+au BufEnter Makefile set tabstop=8
+au BufEnter Makefile set shiftwidth=8
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " GUI settings:
@@ -578,13 +586,27 @@ if has("gui_running")
 endif
 
 let emulator=substitute(system('echo $EMULATOR'), '\n', '', '')
-if emulator == "gnome-terminal-server"
-  colorscheme Tomorrow
-  set bg=light
-  let g:airline_theme = 'tomorrow'
-endif
-if emulator == "xfce4-terminal"
-  set bg=light
-  colorscheme Tomorrow
-  let g:airline_theme = 'tomorrow'
-endif
+set bg=light
+colorscheme solarized
+" hi normal ctermbg=none
+let g:airline_theme = 'solarized'
+" if emulator == "gnome-terminal-server"
+"   colorscheme Tomorrow
+"   set bg=light
+"   let g:airline_theme = 'tomorrow'
+" endif
+" if emulator == "urxvt"
+"   colorscheme Tomorrow
+"   set bg=light
+"   let g:airline_theme = 'tomorrow'
+" endif
+" if emulator == "85x24"
+"   colorscheme Tomorrow
+"   set bg=light
+"   let g:airline_theme = 'tomorrow'
+" endif
+" if emulator == "xfce4-terminal"
+"   set bg=light
+"   colorscheme Tomorrow
+"   let g:airline_theme = 'tomorrow'
+" endif
