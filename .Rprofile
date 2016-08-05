@@ -341,6 +341,13 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   return(g)
 }
 
+.env$plotFun <- function(FUN, range) {
+  require(ggplot2)
+  df <- data.frame(x = seq(range[1], range[2], length.out = 1000))
+  df$y <- sapply(df$x, FUN)
+  ggplot(df, aes(x, y)) + geom_line()
+}
+
 attach(.env)
 
 # Load up some libraries quietly and set the colorscheme:

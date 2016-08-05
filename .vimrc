@@ -576,7 +576,7 @@ if has("gui_running")
     "set guifont=Liberation\ Mono\ 14
     set guifont=Inconsolata\ for\ Powerline\ 16
   endif
-  "set bg=light
+  "set bg=dark
   colorscheme github
   let g:airline_theme = 'base16'
   set guioptions-=m  "remove menu bar
@@ -586,27 +586,27 @@ if has("gui_running")
 endif
 
 let emulator=substitute(system('echo $EMULATOR'), '\n', '', '')
-set bg=light
+set bg=dark
 colorscheme solarized
 " hi normal ctermbg=none
 let g:airline_theme = 'solarized'
 " if emulator == "gnome-terminal-server"
 "   colorscheme Tomorrow
-"   set bg=light
+"   set bg=dark
 "   let g:airline_theme = 'tomorrow'
 " endif
 " if emulator == "urxvt"
 "   colorscheme Tomorrow
-"   set bg=light
+"   set bg=dark
 "   let g:airline_theme = 'tomorrow'
 " endif
 " if emulator == "85x24"
 "   colorscheme Tomorrow
-"   set bg=light
+"   set bg=dark
 "   let g:airline_theme = 'tomorrow'
 " endif
 " if emulator == "xfce4-terminal"
-"   set bg=light
+"   set bg=dark
 "   colorscheme Tomorrow
 "   let g:airline_theme = 'tomorrow'
 " endif

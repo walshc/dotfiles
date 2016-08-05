@@ -105,6 +105,7 @@ alias turn-off-screen='xset dpms force off'
 # Shortcuts to open apps:
 alias open='xdg-open'
 alias tabula='java -Dfile.encoding=utf-8 -Xms256M -Xmx1024M -jar ~/.local/tabula/tabula.jar'
+alias fritzing='$HOME/.local/fritzing-0.9.3b.linux.AMD64/Fritzing'
 alias redshift='nohup redshift -l 42.36:-71.06 > /dev/null &'
 alias preview='feh -g 900x600'
 alias bib-database='vim ~/Dropbox/papers/bib.bib'
@@ -166,8 +167,12 @@ elif [[ $HOSTNAME == m73 ]]; then
 fi
 
 # Shortcut to change font size in urxvt, handy when switching between monitor and laptop:
-alias large-urxvt-font="sed -i -e '6,9s/^/!/g' ~/.Xdefaults -e '10,13s/!//g' && xrdb -load ~/.Xdefaults"
-alias small-urxvt-font="sed -i -e '6,9s/!//g' ~/.Xdefaults -e '10,13s/^/!/g' && xrdb -load ~/.Xdefaults"
+alias large-urxvt-font="sed -i ~/.Xdefaults -e '6,9s/^/!/g' -e '10,13s/!//g' \
+        && xrdb -load ~/.Xdefaults"
+alias small-urxvt-font="sed -i ~/.Xdefaults -e '6,9s/!//g' -e '10,13s/^/!/g' \
+        && xrdb -load ~/.Xdefaults"
+alias night-mode="bash ~/.i3/scripts/night-mode"
+alias light-mode="bash ~/.i3/scripts/light-mode"
 alias laptop-1080p='xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --off'
 alias laptop-768p='xrandr --output eDP1 --mode 1360x768 --output HDMI2 --off'
 alias dual-display-1080p='xrandr --output HDMI2 --primary --mode 1920x1080 --left-of eDP1 --output eDP1 --mode 1920x1080'
@@ -189,7 +194,7 @@ alias mount-windows='sudo mount -t ntfs -o nls=utf8,umask=0222 /dev/sda4 /media/
 alias hs='herbstclient spawn'
 alias fullscreen-urxvt='wmctrl -r :ACTIVE: -b toggle,fullscreen'
 alias start-dropbox='nohup ~/.dropbox-dist/dropboxd > /dev/null &'
-alias start-icons='nohup python3 ~/.i3/autoname-workspaces.py > /dev/null &'
+alias start-icons='nohup python3 ~/.i3/scripts/autoname-workspaces.py > /dev/null &'
 alias start-mopidy='nohup mopidy > /dev/null &'
 
 source ~/.private-aliases
@@ -311,9 +316,9 @@ function extract() {
 # if [[ $EMULATOR == "urxvt" ]] || [[ $EMULATOR == "85x24" ]]; then
 #         PROMPT='${ret_status}%{$fg[blue]%}${PROMPT_HOST}%{$fg_bold[blue]%}%p%{$fg_bold[blue]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
 # else
-#         source ~/.powerline-prompt
+#         source ~/.powerline-prompt-dark
 # fi
-source ~/.powerline-prompt
+source ~/.powerline-prompt-dark
 
 # Make the caps lock be another button for escape
 setxkbmap -option ctrl:escape
