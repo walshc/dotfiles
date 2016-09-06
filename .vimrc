@@ -189,7 +189,7 @@ endfunction
 " Colorscheme
 "colorscheme Tomorrow-Night-Eighties
 " Get the same background as the terminal emulator (for transparency effects):
-"hi normal ctermbg=none
+hi normal ctermbg=none
 
 " Make the comments italic except not on the BU cluster because it doesn't
 " work there:
@@ -576,7 +576,7 @@ if has("gui_running")
     "set guifont=Liberation\ Mono\ 14
     set guifont=Inconsolata\ for\ Powerline\ 16
   endif
-  "set bg=dark
+  "set bg=light
   colorscheme github
   let g:airline_theme = 'base16'
   set guioptions-=m  "remove menu bar
@@ -586,27 +586,27 @@ if has("gui_running")
 endif
 
 let emulator=substitute(system('echo $EMULATOR'), '\n', '', '')
-set bg=dark
+set bg=light
 colorscheme solarized
-" hi normal ctermbg=none
+hi normal ctermbg=none
 let g:airline_theme = 'solarized'
 " if emulator == "gnome-terminal-server"
 "   colorscheme Tomorrow
-"   set bg=dark
+"   set bg=light
 "   let g:airline_theme = 'tomorrow'
 " endif
 " if emulator == "urxvt"
 "   colorscheme Tomorrow
-"   set bg=dark
+"   set bg=light
 "   let g:airline_theme = 'tomorrow'
 " endif
 " if emulator == "85x24"
 "   colorscheme Tomorrow
-"   set bg=dark
+"   set bg=light
 "   let g:airline_theme = 'tomorrow'
 " endif
 " if emulator == "xfce4-terminal"
-"   set bg=dark
+"   set bg=light
 "   colorscheme Tomorrow
 "   let g:airline_theme = 'tomorrow'
 " endif

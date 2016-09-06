@@ -141,11 +141,11 @@ alias plymouth-preview-shutdown='plymouthd --mode=shutdown; \
 # Display settings shortcuts::
 if [[ $HOSTNAME == debian ]]; then
     alias monitor-only="xrandr --auto; xrandr --output HDMI2 --mode 1920x1080 \
-        --output eDP1 --off & sed -i -e '6,9s/!//g' -e '10,13s/^/!/g' ~/.Xdefaults"
+        --output eDP1 --off & bash ~/.i3/scripts/monitor-fonts"
     alias dual-display="xrandr --output HDMI2 --primary --mode 1920x1080 \
         --left-of eDP1 --output eDP1 --mode 2560x1440"
     alias laptop-only="xrandr --output eDP1 --mode 2560x1440 --rotate normal \
-        --output HDMI2 --off & sed -i -e '6,9s/^/!/g' ~/.Xdefaults -e '10,13s/!//g'"
+        --output HDMI2 --off & bash ~/.i3/scripts/laptop-fonts"
     alias dual-monitors='xrandr --output HDMI2 --mode 1920x1080 --left-of HDMI1 \
             --output HDMI1 --mode 1920x1080 --output eDP1 --off'
 elif [[ $HOSTNAME == acer ]]; then
@@ -167,10 +167,8 @@ elif [[ $HOSTNAME == m73 ]]; then
 fi
 
 # Shortcut to change font size in urxvt, handy when switching between monitor and laptop:
-alias large-urxvt-font="sed -i ~/.Xdefaults -e '6,9s/^/!/g' -e '10,13s/!//g' \
-        && xrdb -load ~/.Xdefaults"
-alias small-urxvt-font="sed -i ~/.Xdefaults -e '6,9s/!//g' -e '10,13s/^/!/g' \
-        && xrdb -load ~/.Xdefaults"
+alias monitor-fonts="bash ~/.i3/scripts/monitor-fonts"
+alias laptop-fonts="bash ~/.i3/scripts/laptop-fonts"
 alias night-mode="bash ~/.i3/scripts/night-mode"
 alias light-mode="bash ~/.i3/scripts/light-mode"
 alias laptop-1080p='xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --off'
@@ -316,9 +314,9 @@ function extract() {
 # if [[ $EMULATOR == "urxvt" ]] || [[ $EMULATOR == "85x24" ]]; then
 #         PROMPT='${ret_status}%{$fg[blue]%}${PROMPT_HOST}%{$fg_bold[blue]%}%p%{$fg_bold[blue]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
 # else
-#         source ~/.powerline-prompt-dark
+#         source ~/.powerline-prompt
 # fi
-source ~/.powerline-prompt-dark
+source ~/.powerline-prompt
 
 # Make the caps lock be another button for escape
 setxkbmap -option ctrl:escape

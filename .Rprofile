@@ -354,7 +354,7 @@ attach(.env)
 .term <- system("echo $TERM", intern = TRUE)
 .emulator <- system("echo $EMULATOR", intern = TRUE)
 if (interactive() & (grepl("xterm", .term))) {
-  lapply(c("bit64", "Cairo", "colorout", "data.table", "ggplot2", "setwidth"),
+  lapply(c("colorout", "setwidth"),
          function(x) {
            suppressPackageStartupMessages(require(x, character.only = TRUE))
          })
