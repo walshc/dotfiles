@@ -23,6 +23,10 @@ export VLC_PLUGIN_PATH="/usr/lib/vlc/plugins:$VLC_PLUGIN_PATH"
 export M2_HOME=/opt/apache-maven-3.3.9
 export R_LIBS="$HOME/.local/lib64/R/x86_64-pc-linux-gnu-library/3.2"
 export R_LIBS_USER="$HOME/.local/lib64/R/x86_64-pc-linux-gnu-library/3.2"
+export GPODDER_HOME=/home/christoph/Documents/gPodder
+export GPODDER_DOWNLOAD_DIR=/home/christoph/Documents/gPodder
+PYTHONDONTWRITEBYTECODE=True
+export PYTHONDONTWRITEBYTECODE
 
 # Set $PATH:
 export PATH="/bin:$PATH"
@@ -98,13 +102,13 @@ alias help='man'
 
 # Power management:
 alias shutdown='sudo shutdown -h now'
-alias lock-and-suspend='~/.i3/suspend-and-lock'
-alias lock-screen='~/.i3/blurred-lock'
+alias lock-and-suspend='~/.i3/scripts/blurred-lock & sudo pm-suspend'
+alias lock-screen='~/.i3/scripts/blurred-lock'
 alias turn-off-screen='xset dpms force off'
 
 # Shortcuts to open apps:
 alias open='xdg-open'
-alias tabula='java -Dfile.encoding=utf-8 -Xms256M -Xmx1024M -jar ~/.local/tabula/tabula.jar'
+alias tabula='nohup java -Dfile.encoding=utf-8 -Xms256M -Xmx1024M -jar ~/.local/tabula/tabula.jar > /dev/null &'
 alias fritzing='$HOME/.local/fritzing-0.9.3b.linux.AMD64/Fritzing'
 alias redshift='nohup redshift -l 42.36:-71.06 > /dev/null &'
 alias preview='feh -g 900x600'
@@ -194,6 +198,7 @@ alias fullscreen-urxvt='wmctrl -r :ACTIVE: -b toggle,fullscreen'
 alias start-dropbox='nohup ~/.dropbox-dist/dropboxd > /dev/null &'
 alias start-icons='nohup python3 ~/.i3/scripts/autoname-workspaces.py > /dev/null &'
 alias start-mopidy='nohup mopidy > /dev/null &'
+alias restart-sync='killall dropbox; dropbox start; killall insync; insync start'
 
 source ~/.private-aliases
 
@@ -225,13 +230,13 @@ function mugar_print() {
 # Send a script with qsub with "qsub_job myscript.R"
 function qsub_job() {
   jobname=$(basename $1)
-  qsub -P econdept -cwd -m beas -N $jobname $1
+  qsub -P econdept -cwd -m beas -N -b y $jobname $1
 }
 
 # Same as above but for parallel jobs:
 function qsub_parallel_job() {
   jobname=$(basename $1)
-  qsub -P econdept -pe omp 12 -cwd -m beas -N $jobname $1
+  qsub -P econdept -pe omp 12 -cwd -m beas -N -b y $jobname $1
 }
 
 function weather() {
@@ -271,57 +276,25 @@ function extract() {
 # Setting the prompt
 ###############################################################################
 
-# Shows directory (two directories deep only)
-# Shows hostname if connected via SSH and also shows root.
-# Shows git repos and changes colors depending on if there are unstaged commits
-# or up to date.
+# SSH host information:
+if [[ -n "$SSH_CLIENT" ]]; then
+  PROMPT_HOST="($HOST) "
+elif [[ `whoami` == "root" ]]; then
+  PROMPT_HOST="(root) "
+else
+  PROMPT_HOST=''
+fi
 
-# autoload -U add-zsh-hook
-# autoload -Uz vcs_info
-# 
-# # Git information:
-# zstyle ':vcs_info:*' actionformats \
-#        '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-# zstyle ':vcs_info:*' formats ' %F{2}%s%F{7}:%F{2}(%F{1}%b%F{2})%f '
-# zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-# zstyle ':vcs_info:*' enable git
-# 
-# prompt_vcs () {
-#   vcs_info
-#   if [ "${vcs_info_msg_0_}" = "" ]; then
-#     dir_status="$%f"
-#   elif [[ $(git diff --cached --name-status 2>/dev/null ) != "" ]]; then
-#     dir_status="%F{1}»%f"
-#   elif [[ $(git diff --name-status 2>/dev/null ) != "" ]]; then
-#     dir_status="%F{3}»%f"
-#   else
-#     dir_status="%F{2}»%f"
-#   fi
-# }
-# 
-# add-zsh-hook precmd prompt_vcs
-# 
-# # SSH host information:
-# if [[ -n "$SSH_CLIENT" ]]; then
-#   PROMPT_HOST="($HOST) "
-# elif [[ `whoami` == "root" ]]; then
-#   PROMPT_HOST="(root) "
-# else
-#   PROMPT_HOST=''
-# fi
-# 
-# # Finally setting the prompt and colours:
-# if [[ $EMULATOR == "urxvt" ]] || [[ $EMULATOR == "85x24" ]]; then
-#         PROMPT='${ret_status}%{$fg[blue]%}${PROMPT_HOST}%{$fg_bold[blue]%}%p%{$fg_bold[blue]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
-# else
-#         source ~/.powerline-prompt
-# fi
-source ~/.powerline-prompt
+# Finally setting the prompt and colours:
+if [[ -n "$SSH_CLIENT" ]]; then
+      PROMPT='${PROMPT_HOST}%{$fg_bold[blue]%}%p%{$fg_bold[blue]%}%2~ ${dir_status}%{$reset_color%}$ '
+else
+      source ~/.powerline-prompt-tne
+fi
 
 # Make the caps lock be another button for escape
 setxkbmap -option ctrl:escape
 eval setxkbmap -option caps:escape
-unset GNOME_KEYRING_CONTROL  # turn off gnome keyring
 
 if ! [[ -n "$SSH_CLIENT" ]]; then
         source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

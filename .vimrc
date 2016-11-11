@@ -16,7 +16,8 @@ Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-scripts/mayansmoke'
 Plugin 'tomasr/molokai'
 Plugin 'scrooloose/nerdtree'
-Plugin 'vim-scripts/R.vim'
+Plugin 'jalvesaq/Nvim-R'
+"Plugin 'vim-scripts/R.vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'edkolev/promptline.vim'
 Plugin 'ervandew/supertab'
@@ -134,7 +135,7 @@ noremap <F7> :tabp<CR>
 noremap <F8> :tabn<CR>
 inoremap <F7> <Esc>:tabp<CR>i
 inoremap <F8> <Esc>:tabn<CR>i
-hi normal ctermbg=none
+" " " " " " " " hi normal ctermbg=none
 
 " Tabs and hidden characters
 set expandtab
@@ -186,17 +187,11 @@ function! SpellCheck()
   setlocal spell! spelllang=en_us
 endfunction
 
-" Colorscheme
-"colorscheme Tomorrow-Night-Eighties
-" Get the same background as the terminal emulator (for transparency effects):
-hi normal ctermbg=none
-
 " Make the comments italic except not on the BU cluster because it doesn't
 " work there:
 if hostname != "scc1"
   highlight Comment cterm=italic
 endif
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -209,7 +204,6 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " badwolf, ubaryd, term, and wombat are also good themes:
-let g:airline_theme                        = 'term'
 let g:airline_powerline_fonts              = 1
 let g:airline#extensions#whitespace#checks = []
 let g:airline#extensions#hunks#enabled     = 0
@@ -463,6 +457,8 @@ au BufEnter *.R imap <F11> <Esc>:<C-U>1,'<-1:s/^/# /<CR>:'>+1,$:s/^/# /<CR>
 " with the source function:
 au BufEnter *.R map  <F10> :w<cr>:let @+ = 'e("' . expand("%") . '")'<cr>
 au BufEnter *.R imap <F10> <Esc>:w<cr>:let @+ = 'e("' . expand("%") . '")'<cr>i
+au BufEnter *.R map  <F8> :w<cr>:let @+ = 'e("' . expand("%:p") . '")'<cr>
+au BufEnter *.R imap <F8> <Esc>:w<cr>:let @+ = 'e("' . expand("%:p") . '")'<cr>i
 " Copy the file path of the current directory and wrap it with setwd():
 au BufEnter *.R map  ,p :let @+ = 'setwd("' . getcwd() . '")'<cr>
 au BufEnter *.R imap ,p <Esc>:let @+ = 'setwd("' . getcwd() . '")'<cr>i
@@ -576,37 +572,37 @@ if has("gui_running")
     "set guifont=Liberation\ Mono\ 14
     set guifont=Inconsolata\ for\ Powerline\ 16
   endif
-  "set bg=light
   colorscheme github
-  let g:airline_theme = 'base16'
+  let g:airline_theme = "papercolor"
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
+else
+let emulator=substitute(system('echo $EMULATOR'), '\n', '', '')
+set bg=dark
+colorscheme Tomorrow-Night-Eighties
+hi normal ctermbg=none
+let g:airline_theme = "wombat"
 endif
 
-let emulator=substitute(system('echo $EMULATOR'), '\n', '', '')
-set bg=light
-colorscheme solarized
-hi normal ctermbg=none
-let g:airline_theme = 'solarized'
 " if emulator == "gnome-terminal-server"
 "   colorscheme Tomorrow
-"   set bg=light
-"   let g:airline_theme = 'tomorrow'
+"   set bg=dark
+"   let g:airline_theme = tomorrow
 " endif
 " if emulator == "urxvt"
 "   colorscheme Tomorrow
-"   set bg=light
-"   let g:airline_theme = 'tomorrow'
+"   set bg=dark
+"   let g:airline_theme = tomorrow
 " endif
 " if emulator == "85x24"
 "   colorscheme Tomorrow
-"   set bg=light
-"   let g:airline_theme = 'tomorrow'
+"   set bg=dark
+"   let g:airline_theme = tomorrow
 " endif
 " if emulator == "xfce4-terminal"
-"   set bg=light
+"   set bg=dark
 "   colorscheme Tomorrow
-"   let g:airline_theme = 'tomorrow'
+"   let g:airline_theme = tomorrow
 " endif

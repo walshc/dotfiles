@@ -70,6 +70,9 @@ invisible(Sys.setlocale("LC_ALL", "C"))
 # head() is now just h():
 .env$h <- utils::head
 
+# head() for matrices: show the first n rows and columns of a matrix
+.env$mh <- function(x, n = 6L) x[1:min(nrow(x), n), 1:min(ncol(x), n)]
+
 # clear() to delete all objects:
 .env$clear <- function() rm(list=ls())
 
@@ -93,10 +96,10 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   print(Sys.time() - start.time)
 }
 
-# lu(x) to show number of unique elements
-.env$lu <- function(x) length(unique(x))
+# Show number of unique elements
+.env$lenu <- function(x) length(unique(x))
 
-# su(x) to sort unique elements in ascending order
+# Sort unique elements in ascending order
 .env$su <- function(x) sort(unique(x))
 
 # pna(x) to get the percentage of NAs in a vector/data.frame
@@ -348,22 +351,41 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   ggplot(df, aes(x, y)) + geom_line()
 }
 
+.env$plotCols <- function(cols) {
+  df <- data.frame(x = 1:length(cols), y = rep(0, length(cols)))
+  ggplot(df, aes(x, y, color = cols)) + geom_point(size = 10) +
+  scale_color_manual(name = "", values = cols) +
+  theme(axis.text = element_blank(), axis.ticks = element_blank(),
+        axis.title = element_blank(), legend.position = "bottom",
+        panel.background = element_blank())
+}
+
+.env$unloadInstallReload <- function(x, package.path = ".", type = "source") {
+  library(x, character.only = TRUE)
+  detach(paste0("package:", x), unload = TRUE)
+  if (type == "source") {
+    install.packages(package.path, repos = NULL, type = "source")
+  } else {
+    install.packages(x)
+  }
+  library(x, character.only = TRUE)
+}
+.env$getPrompt <- function(x) {
+  # paste0(gsub("/home/christoph", "~", getwd()), "  ")
+  paste(ifelse(getwd() == "/home/christoph", "~/",
+    rev(strsplit(getwd(), "/")[[1]])[1]), " ")
+}
 attach(.env)
 
 # Load up some libraries quietly and set the colorscheme:
 .term <- system("echo $TERM", intern = TRUE)
 .emulator <- system("echo $EMULATOR", intern = TRUE)
 if (interactive() & (grepl("xterm", .term))) {
-  lapply(c("colorout", "setwidth"),
+  lapply(c("colorout", "data.table", "ggplot2", "setwidth"),
          function(x) {
            suppressPackageStartupMessages(require(x, character.only = TRUE))
          })
-  if ((.emulator == "gnome-terminal-server") | (.emulator == "xfce4-terminal")) {
-    solarizedLight()
-  } else {
-    #tomorrowNightEighties()
-    solarizedLight()
-  }
+  tomorrowNightEighties()  # Set colorscheme
 }
 
 # Never ask for my CRAN mirror again:
@@ -405,4 +427,8 @@ for (i in welcome) {
 }
 cat("\n")
 rm(welcome, welcome.chars, i)
-options(prompt = "R> ")
+setwd <- function(dir) {
+  base::setwd(dir)
+  options(prompt = getPrompt())
+}
+options(prompt = getPrompt(), continue = " ")
