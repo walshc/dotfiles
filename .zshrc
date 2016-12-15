@@ -14,7 +14,8 @@ setopt EXTENDED_HISTORY
 # export LANG=ga_IE.UTF-8
 # export LC_ALL=ga_IE.UTF-8
 export TERM='xterm-256color'
-export BROWSER='firefox'
+export BROWSER=firefox
+export DE=i3
 export R_HISTFILE=~/.Rhistory
 export WINEARCH=win64
 export EMULATOR=`basename "/"$(ps -f -p $(cat /proc/$(echo $$)/stat | cut -d \  -f 4) | tail -1 | sed 's/^.* //')`
@@ -44,17 +45,14 @@ export PATH="$HOME/Dropbox/papers/scholar.py:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/applications:$PATH"
+export PATH="$HOME/.i3/scripts:$PATH"
 export PATH=$PATH:$M2_HOME/bin
 
 export GOPATH="$HOME/.go"
 export QT_STYLE_OVERRIDE=GTK+
 export TESSDATA_PREFIX=/usr/local/share
 
-if [[ $EMULATOR == "urxvt" ]]; then
-        eval $( dircolors -b ~/.dircolors )
-else
-        eval $( dircolors -b ~/.dircolors )
-fi
+eval $( dircolors -b ~/.dircolors )
 
 ###############################################################################
 # Aliases
@@ -66,7 +64,15 @@ HOSTNAME=`/bin/hostname`
 # Open apps in quiet terminal mode without having to append options:
 alias R='R -q'
 alias matlab='matlab -nodesktop -nosplash'
+if [[ "$HOSTNAME" == "scc1" ]]; then
+        module load R/3.3.2
+        module load cuda/5.0
+        module load vim/8.0
+        module load gdal/1.9.2
+        module load armadillo/7.400.2
+fi
 alias stata='stata -q'
+alias julia='~/.local/julia-3c9d75391c/bin/julia'
 
 # Git aliases:
 alias ga='git add -u'
@@ -88,6 +94,7 @@ alias Rprofile='vim ~/.Rprofile'
 
 # Don't delete things by accident:
 alias rm='rm -i'
+alias crontab='crontab -i'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -109,6 +116,7 @@ alias turn-off-screen='xset dpms force off'
 # Shortcuts to open apps:
 alias open='xdg-open'
 alias tabula='nohup java -Dfile.encoding=utf-8 -Xms256M -Xmx1024M -jar ~/.local/tabula/tabula.jar > /dev/null &'
+alias briss='nohup java -jar ~/.local/briss-0.9/briss-0.9.jar > /dev/null &'
 alias fritzing='$HOME/.local/fritzing-0.9.3b.linux.AMD64/Fritzing'
 alias redshift='nohup redshift -l 42.36:-71.06 > /dev/null &'
 alias preview='feh -g 900x600'
@@ -289,7 +297,7 @@ fi
 if [[ -n "$SSH_CLIENT" ]]; then
       PROMPT='${PROMPT_HOST}%{$fg_bold[blue]%}%p%{$fg_bold[blue]%}%2~ ${dir_status}%{$reset_color%}$ '
 else
-      source ~/.powerline-prompt-tne
+      source ~/.powerline-prompt
 fi
 
 # Make the caps lock be another button for escape
@@ -299,3 +307,27 @@ eval setxkbmap -option caps:escape
 if ! [[ -n "$SSH_CLIENT" ]]; then
         source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
+
+BASE16_SHELL=$HOME/.config/base16-shell
+[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+# xrdb -merge ~/.Xdefaults
+
+# Run with with base16_colorscheme command to sync things up:
+# function colorscheme() {
+#   xrdb -load \
+#     ~/BU-Drive/debian/base16-xresources/xresources/base16-$1-256.Xresources
+#   colorscheme-switcher $1
+#   if [[ "$1" == "mocha" ]]; then
+#     sed -i ~/Dropbox/dotfiles/.vimrc -e \
+#             's/^let g:airline_theme.*$/let g:airline_theme = "term"/g'
+#     cp ~/BU-Drive/debian/prompts/term ~/.powerline-prompt
+#   elif [[ "$1" == "monokai" ]]; then
+#     sed -i ~/Dropbox/dotfiles/.vimrc -e \
+#             's/let g:airline_theme.*$/let g:airline_theme = "wombat"/g'
+#     cp ~/BU-Drive/debian/prompts/wombat ~/.powerline-prompt
+#   elif [[ "$1" == "solarized-light" ]]; then
+#     sed -i ~/Dropbox/dotfiles/.vimrc -e \
+#             's/let g:airline_theme.*$/let g:airline_theme = "solarized"/g'
+#   fi
+# }
+

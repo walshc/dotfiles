@@ -9,6 +9,7 @@ set rtp+=$HOME/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'chriskempson/base16-vim'
 Plugin 'itchyny/calendar.vim'
+Plugin 'chrisbra/csv.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'morhetz/gruvbox'
 " Plugin 'Yggdroot/indentLine'
@@ -16,7 +17,7 @@ Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-scripts/mayansmoke'
 Plugin 'tomasr/molokai'
 Plugin 'scrooloose/nerdtree'
-Plugin 'jalvesaq/Nvim-R'
+"Plugin 'jalvesaq/Nvim-R'
 "Plugin 'vim-scripts/R.vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'edkolev/promptline.vim'
@@ -34,7 +35,7 @@ Plugin 'junegunn/vim-easy-align'
 " Plugin 'easymotion/vim-easymotion'
 Plugin 'tpope/vim-fugitive'
 Plugin 'nathanaelkane/vim-indent-guides'
-" Plugin 'airblade/vim-gitgutter'
+Plugin 'airblade/vim-gitgutter'
 Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'gerw/vim-latex-suite'
 Plugin 'plasticboy/vim-markdown'
@@ -135,7 +136,6 @@ noremap <F7> :tabp<CR>
 noremap <F8> :tabn<CR>
 inoremap <F7> <Esc>:tabp<CR>i
 inoremap <F8> <Esc>:tabn<CR>i
-" " " " " " " " hi normal ctermbg=none
 
 " Tabs and hidden characters
 set expandtab
@@ -192,6 +192,9 @@ endfunction
 if hostname != "scc1"
   highlight Comment cterm=italic
 endif
+
+" backspace
+set backspace=2
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -256,7 +259,7 @@ let g:indent_guides_color_change_percent = 2
 
 let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat = 'pdf'
-let g:Tex_CompileRule_pdf = 'latexmk -shell-escape --interaction=nonstopmode --synctex=1 -pdflatex="pdflatex % %S" -pdf $*; latexmk -c %'
+let g:Tex_CompileRule_pdf = 'urxvt -e latexmk -shell-escape --interaction=nonstopmode --synctex=1 -pdflatex="pdflatex % %S" -pdf $*; latexmk -c %'
 let g:Tex_ViewRule_pdf = 'evince'
 let g:tex_conceal = ""
 let g:Tex_IgnoredWarnings ='
@@ -427,8 +430,8 @@ au BufEnter *.md map  <F2> <Esc>:w<cr>:!  markdown % > %:r.html<cr><cr>
 au BufEnter *.md imap <F2> <Esc>:w<cr>:!  markdown % > %:r.html<cr><cr>
 au BufEnter *.md imap <F3> <Esc>:!nohup evince %:r.pdf &<CR><CR>
 au BufEnter *.md  map <F3> <Esc>:!nohup evince %:r.pdf &<CR><CR>
-au BufEnter *.md map  <F9> <Esc>:w<cr>:!  pandoc -S % -o  %:r.pdf<cr><cr>
-au BufEnter *.md imap <F9> <Esc>:w<cr>:!  pandoc -S % -o  %:r.pdf<cr><cr>
+au BufEnter *.md map  <F9> <Esc>:w<cr>:!  pandoc -V geometry:margin=1in -S % -o  %:r.pdf<cr><cr>
+au BufEnter *.md imap <F9> <Esc>:w<cr>:!  pandoc  -V geometry:margin=1in -S % -o  %:r.pdf<cr><cr>
 au BufEnter *.md map  <F10> <Esc>:w<cr>:! markdown-pdf % -o  %:r.pdf<cr><cr>
 au BufEnter *.md imap <F10> <Esc>:w<cr>:! markdown-pdf % -o  %:r.pdf<cr><cr>
 
@@ -466,6 +469,11 @@ au BufEnter *.R let g:airline#extensions#tabline#enabled = 1
 au BufEnter *.R set formatoptions+=r
 au BufEnter *.R call LongLineGuide()
 au BufNewFile *.R 0r ~/Dropbox/dotfiles/R-template
+let R_term = "urxvt"
+let rout_follow_colorscheme = 1
+let R_assign = 0
+let R_nvimpager = "no"
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Rd-specific settings
@@ -555,7 +563,7 @@ au BufEnter *.tex nmap k gk
 au BufEnter *.tex set shiftwidth=2
 au BufEnter *.tex set tw=79
 au BufEnter *.tex set formatoptions+=t
-"au BufEnter *.tex setlocal spell spelllang=en_us
+au BufEnter *.tex setlocal spell spelllang=en_us
 
 
 " For makefiles, make sure you use tabs:
@@ -572,37 +580,16 @@ if has("gui_running")
     "set guifont=Liberation\ Mono\ 14
     set guifont=Inconsolata\ for\ Powerline\ 16
   endif
-  colorscheme github
-  let g:airline_theme = "papercolor"
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
-else
-let emulator=substitute(system('echo $EMULATOR'), '\n', '', '')
-set bg=dark
-colorscheme Tomorrow-Night-Eighties
-hi normal ctermbg=none
-let g:airline_theme = "wombat"
 endif
+let base16colorspace=256
+source ~/.vimrc_background
+"set bg=light
+let g:airline_theme = "term"
 
-" if emulator == "gnome-terminal-server"
-"   colorscheme Tomorrow
-"   set bg=dark
-"   let g:airline_theme = tomorrow
-" endif
-" if emulator == "urxvt"
-"   colorscheme Tomorrow
-"   set bg=dark
-"   let g:airline_theme = tomorrow
-" endif
-" if emulator == "85x24"
-"   colorscheme Tomorrow
-"   set bg=dark
-"   let g:airline_theme = tomorrow
-" endif
-" if emulator == "xfce4-terminal"
-"   set bg=dark
-"   colorscheme Tomorrow
-"   let g:airline_theme = tomorrow
-" endif
+"let base16colorspace=256
+"colorscheme base16-monokai
+" hi normal ctermbg=none

@@ -1,5 +1,5 @@
 # Add custom library path:
-.libPaths(c("~/.local/lib64/R/x86_64-pc-linux-gnu-library/3.2", .libPaths()[-1]))
+.libPaths("~/.local/lib64/R/x86_64-pc-linux-gnu-library/3.2")
 
 # Save command history even if not saving workspace:
 .Last <- function() {
@@ -12,21 +12,7 @@ invisible(Sys.setlocale("LC_ALL", "C"))
 
 # Invisible environment for functions created here (for interactive use, never
 # use in code):
-
 .env <- new.env()
-
-# Colorschemes:
-.env$tomorrowNightEighties <- function() {
-  require(colorout)
-  setOutputColors256(150, 210, 252, 222, 68, 81, 252, 168, 150, 177,
-                     253, 210, 211, FALSE)
-}
-
-.env$solarizedLight <- function() {
-  require(colorout)
-  setOutputColors256(243, 167, 63, 101, 33, 33, 169, 167, 37, 63,
-                     167, 167, 167, FALSE)
-}
 
 # source() is now just e() and has a timer and notifies when complete or errors:
 .env$e <- function(x, notify = FALSE, ...) {
@@ -58,17 +44,22 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   }
 }
 
+.env$installFromSource <- function(x) {
+  install.packages(x, type = "source", repos = NULL)
+}
+
 # Add some aliases to make commands similar to the terminal:
 .env$man <- utils::help
 .env$pwd <- base::getwd
 .env$cd <- base::setwd
 .env$l <- base::list.files
 
-# summary() is now just s():
+# Shorten commonly-used interactive commands:
 .env$s <- base::summary
-
-# head() is now just h():
 .env$h <- utils::head
+.env$len <- base::length
+.env$lenu <- function(x) length(unique(x))
+.env$su <- function(x) sort(unique(x))
 
 # head() for matrices: show the first n rows and columns of a matrix
 .env$mh <- function(x, n = 6L) x[1:min(nrow(x), n), 1:min(ncol(x), n)]
@@ -96,11 +87,6 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   print(Sys.time() - start.time)
 }
 
-# Show number of unique elements
-.env$lenu <- function(x) length(unique(x))
-
-# Sort unique elements in ascending order
-.env$su <- function(x) sort(unique(x))
 
 # pna(x) to get the percentage of NAs in a vector/data.frame
 .env$pna <- function(x) {
@@ -375,18 +361,22 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   paste(ifelse(getwd() == "/home/christoph", "~/",
     rev(strsplit(getwd(), "/")[[1]])[1]), " ")
 }
+
+.env$clearWarnings <- function() {
+  assign("last.warning", NULL, envir = baseenv())
+}
 attach(.env)
 
 # Load up some libraries quietly and set the colorscheme:
 .term <- system("echo $TERM", intern = TRUE)
 .emulator <- system("echo $EMULATOR", intern = TRUE)
-if (interactive() & (grepl("xterm", .term))) {
-  lapply(c("colorout", "data.table", "ggplot2", "setwidth"),
-         function(x) {
-           suppressPackageStartupMessages(require(x, character.only = TRUE))
-         })
-  tomorrowNightEighties()  # Set colorscheme
+if (interactive()) {
+  invisible(lapply(c("base16colorout", "colorout", "data.table", "ggplot2",
+                     "setwidth"), function(x) {
+           suppressPackageStartupMessages(require(x, character.only = TRUE))}))
 }
+base16colorout::base16colorout(paste(utils::read.table("~/.config/colorscheme")$V1),
+                               verbose = FALSE)
 
 # Never ask for my CRAN mirror again:
 if (system("hostname", intern = TRUE) == "scc1") {

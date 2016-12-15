@@ -1,73 +1,97 @@
 
-! ------------------------------------------------------------------------------
-! ROFI Color theme
-! ------------------------------------------------------------------------------
-! Use extended color scheme
-rofi.color-enabled:                  true
-! Color scheme for normal row
-rofi.color-normal:                   #ffffff,#525d76,#f5f5f5,#5294e2,#ffffff
-! Color scheme for urgent row
-rofi.color-urgent:                   #ffffff,#dc322f,#f5f5f5,#5294e2,#dc322f
-! Color scheme for active row
-rofi.color-active:                   #ffffff,#c2cad0,#f5f5f5,#5294e2,#c2cad0
-! Color scheme window
-rofi.color-window:                   #ffffff,#f5f5f5
-! Separator style (none, dash, solid)
-rofi.separator-style:                solid
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! URxvt
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+URxvt.letterSpace: -1
+URxvt*font: xft:Inconsolata:size=15,xft:Inconsolata for Powerline:size=15
+URxvt*boldFont: xft:Inconsolata:size=15:bold,xft:Inconsolata for Powerline:size=15:bold
+URxvt*italicFont: xft:Inconsolata:size=15:italic,xft:Inconsolata for Powerline:size=15:italic
+URxvt*bolditalicFont: xft:Inconsolata:size=15:bolditalic,xft:Inconsolata for Powerline:size=15:bolditalic
+URxvt.urlLauncher: /usr/bin/google-chrome
+URxvt.matcher.button: 1
+URxvt*geometry: 85x24
+URxvt*scrollBar: false
+URxvt.perl-ext-common: default,clipboard,font-size,fullscreen,config-reload
+URxvt.keysym.C-Up:   perl:font-size:increase
+URxvt.keysym.C-Down: perl:font-size:decrease
+URxvt.font-size.step: 6
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt.keysym.Shift-F11: perl:fullscreen:switch
+URxvt.iso14755: False
+urxvt*blurRadius: 50
+URxvt.depth: 32
+URxvt*iconFile: /usr/share/icons/Numix-Circle/48x48/apps/Terminal.svg
 
-#define S_base03        #002b36
-#define S_base02        #073642
-#define S_base01        #586e75
-#define S_base00        #657b83
-#define S_base0         #839496
-#define S_base1         #93a1a1
-#define S_base2         #eee8d5
-#define S_base3         #fdf6e3
 
-*background:            S_base3
-*foreground:            S_base00
-*fadeColor:             S_base3
-*cursorColor:           S_base01
-*pointerColorBackground:S_base1
-*pointerColorForeground:S_base01
-
-#define S_yellow        #b58900
-#define S_orange        #cb4b16
-#define S_red           #dc322f
-#define S_magenta       #d33682
-#define S_violet        #6c71c4
-#define S_blue          #268bd2
-#define S_cyan          #2aa198
-#define S_green         #859900
-
-!! black dark/light
-*color0:                S_base02
-*color8:                S_base03
-
-!! red dark/light
-*color1:                S_red
-*color9:                S_orange
-
-!! green dark/light
-*color2:                S_green
-*color10:               S_base01
-
-!! yellow dark/light
-*color3:                S_yellow
-*color11:               S_base00
-
-!! blue dark/light
-*color4:                S_blue
-*color12:               S_base0
-
-!! magenta dark/light
-*color5:                S_magenta
-*color13:               S_violet
-
-!! cyan dark/light
-*color6:                S_cyan
-*color14:               S_base1
-
-!! white dark/light
-*color7:                S_base2
-*color15:               S_base3
+!! ------------------------------------------------------------------------------
+!! ROFI Color theme
+!! ------------------------------------------------------------------------------
+!! Use extended color scheme
+!rofi.color-enabled:                  true
+!! Color scheme for normal row
+!rofi.color-normal:                   #ffffff,#525d76,#f5f5f5,#5294e2,#ffffff
+!! Color scheme for urgent row
+!rofi.color-urgent:                   #ffffff,#dc322f,#f5f5f5,#5294e2,#dc322f
+!! Color scheme for active row
+!rofi.color-active:                   #ffffff,#c2cad0,#f5f5f5,#5294e2,#c2cad0
+!! Color scheme window
+!rofi.color-window:                   #ffffff,#f5f5f5
+!! Separator style (none, dash, solid)
+!rofi.separator-style:                solid
+!
+!#define S_base03        #002b36
+!#define S_base02        #073642
+!#define S_base01        #586e75
+!#define S_base00        #657b83
+!#define S_base0         #839496
+!#define S_base1         #93a1a1
+!#define S_base2         #eee8d5
+!#define S_base3         #fdf6e3
+!
+!*background:            S_base3
+!*foreground:            S_base00
+!*fadeColor:             S_base3
+!*cursorColor:           S_base01
+!*pointerColorBackground:S_base1
+!*pointerColorForeground:S_base01
+!
+!#define S_yellow        #b58900
+!#define S_orange        #cb4b16
+!#define S_red           #dc322f
+!#define S_magenta       #d33682
+!#define S_violet        #6c71c4
+!#define S_blue          #268bd2
+!#define S_cyan          #2aa198
+!#define S_green         #859900
+!
+!!! black dark/light
+!*color0:                S_base02
+!*color8:                S_base03
+!
+!!! red dark/light
+!*color1:                S_red
+!*color9:                S_orange
+!
+!!! green dark/light
+!*color2:                S_green
+!*color10:               S_base01
+!
+!!! yellow dark/light
+!*color3:                S_yellow
+!*color11:               S_base00
+!
+!!! blue dark/light
+!*color4:                S_blue
+!*color12:               S_base0
+!
+!!! magenta dark/light
+!*color5:                S_magenta
+!*color13:               S_violet
+!
+!!! cyan dark/light
+!*color6:                S_cyan
+!*color14:               S_base1
+!
+!!! white dark/light
+!*color7:                S_base2
+!*color15:               S_base3
