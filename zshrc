@@ -11,8 +11,6 @@ stty -ixon
 export HISTSIZE=1000000000
 export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
-# export LANG=ga_IE.UTF-8
-# export LC_ALL=ga_IE.UTF-8
 export TERM='xterm-256color'
 export BROWSER=firefox
 export DE=i3
@@ -42,17 +40,17 @@ export PATH="/usr/bin:$PATH"
 export PATH="/usr/sbin/:$PATH"
 export PATH="/usr/games:$PATH"
 export PATH="$HOME/Dropbox/papers/scholar.py:$PATH"
+export PATH="$HOME/.local/pycharm-community-2017.2.2/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/applications:$PATH"
-export PATH="$HOME/.i3/scripts:$PATH"
+export PATH="$HOME/.i3/scripts/:$PATH"
+# export PATH="$HOME/.i3/scripts:$PATH"
 export PATH=$PATH:$M2_HOME/bin
 
 export GOPATH="$HOME/.go"
 export QT_STYLE_OVERRIDE=GTK+
 export TESSDATA_PREFIX=/usr/local/share
-
-eval $( dircolors -b ~/.dircolors )
 
 ###############################################################################
 # Aliases
@@ -62,14 +60,15 @@ eval $( dircolors -b ~/.dircolors )
 HOSTNAME=`/bin/hostname`
 
 # Open apps in quiet terminal mode without having to append options:
-alias R='R -q'
+alias R='R -q --no-save'
 alias matlab='matlab -nodesktop -nosplash'
 if [[ "$HOSTNAME" == "scc1" ]]; then
-        module load R/3.3.2
-        module load cuda/5.0
-        module load vim/8.0
-        module load gdal/1.9.2
         module load armadillo/7.400.2
+        module load R/3.3.0
+        module load stata/14
+        module load tmux/2.0
+        module load unison/2.48.3
+        module load vim/8.0
 fi
 alias stata='stata -q'
 alias julia='~/.local/julia-3c9d75391c/bin/julia'
@@ -119,28 +118,15 @@ alias tabula='nohup java -Dfile.encoding=utf-8 -Xms256M -Xmx1024M -jar ~/.local/
 alias briss='nohup java -jar ~/.local/briss-0.9/briss-0.9.jar > /dev/null &'
 alias fritzing='$HOME/.local/fritzing-0.9.3b.linux.AMD64/Fritzing'
 alias redshift='nohup redshift -l 42.36:-71.06 > /dev/null &'
-alias preview='feh -g 900x600'
 alias bib-database='vim ~/Dropbox/papers/bib.bib'
 alias ncmpcpp='ncmpcpp --config ~/.i3/ncmpcpp.conf'
 alias ncmpcpp-pi='ncmpcpp --config ~/.i3/ncmpcpp-pi.conf'
-alias mpc-pi='mpc -h 192.168.0.106'
 alias rnag='mpc clear; mpc add tunein:station:s25665; mpc play'
 alias wgbh='mpc clear; mpc add tunein:station:s28957; mpc play'
 alias rte1='mpc clear; mpc add tunein:station:s15066; mpc play'
+alias tcr-fm='mpc clear; mpc add tunein:station:s166348; mpc play'
+alias wlr-fm='mpc clear; mpc add tunein:station:s16511; mpc play'
 alias pause-spotify='playerctl -p spotify play-pause'
-# Create a Stata alias only on the Thinkpad:
-thinkpad={'lenovo'}
-if [ "$HOSTNAME" = lenovo ] | [ "$HOSTNAME" = acer ]; then
-  alias stata='/usr/local/stata13/stata-se -q';
-  alias xstata='/usr/local/stata13/xstata-se -q'
-  #alias vim='vim --username VIM'
-fi
-
-if [ "$HOSTNAME" = scc1 ]; then
-  alias R2='/usr/local/bin/R -q';
-  alias splat='/usr3/graduate/walshcb/.local/bin/splat';
-  alias splat-hd='/usr3/graduate/walshcb/.local/bin/splat-hd';
-fi
 
 # Preview the boot and shutdown animation:
 alias plymouth-preview-boot='plymouthd; plymouth --show-splash; \
@@ -151,15 +137,13 @@ alias plymouth-preview-shutdown='plymouthd --mode=shutdown; \
   do plymouth --update=test$I; sleep 1; done; plymouth quit'
 
 # Display settings shortcuts::
-if [[ $HOSTNAME == debian ]]; then
-    alias monitor-only="xrandr --auto; xrandr --output HDMI2 --mode 1920x1080 \
-        --output eDP1 --off & bash ~/.i3/scripts/monitor-fonts"
-    alias dual-display="xrandr --output HDMI2 --primary --mode 1920x1080 \
-        --left-of eDP1 --output eDP1 --mode 2560x1440"
-    alias laptop-only="xrandr --output eDP1 --mode 2560x1440 --rotate normal \
-        --output HDMI2 --off & bash ~/.i3/scripts/laptop-fonts"
-    alias dual-monitors='xrandr --output HDMI2 --mode 1920x1080 --left-of HDMI1 \
-            --output HDMI1 --mode 1920x1080 --output eDP1 --off'
+if [[ $HOSTNAME == "x1carbon" ]]; then
+    alias monitor-only="xrandr --auto; xrandr --output 'HDMI-2' --mode 1920x1080 \
+        --output 'eDP-1' --off & bash ~/.i3/scripts/monitor-fonts"
+    alias dual-display="xrandr --output 'HDMI-2' --primary --mode 1920x1080 \
+        --left-of 'eDP-1' --output 'eDP-1' --mode 2560x1440"
+    alias laptop-only="xrandr --output 'eDP-1' --mode 2560x1440 --rotate normal \
+        --output 'HDMI-2' --off & bash ~/.i3/scripts/laptop-fonts"
 elif [[ $HOSTNAME == acer ]]; then
     alias monitor-only='xrandr --auto; xrandr --output HDMI1 --mode 1920x1080 \
          --output LVDS1 --off'
@@ -179,20 +163,10 @@ elif [[ $HOSTNAME == m73 ]]; then
 fi
 
 # Shortcut to change font size in urxvt, handy when switching between monitor and laptop:
-alias monitor-fonts="bash ~/.i3/scripts/monitor-fonts"
-alias laptop-fonts="bash ~/.i3/scripts/laptop-fonts"
-alias night-mode="bash ~/.i3/scripts/night-mode"
-alias light-mode="bash ~/.i3/scripts/light-mode"
-alias laptop-1080p='xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --off'
-alias laptop-768p='xrandr --output eDP1 --mode 1360x768 --output HDMI2 --off'
-alias dual-display-1080p='xrandr --output HDMI2 --primary --mode 1920x1080 --left-of eDP1 --output eDP1 --mode 1920x1080'
-alias projector-mode='xrandr --output DP1 --auto --output eDP1 --off'
-alias mirror-with-projector='xrandr --output DP1 --mode 1024x768 --output eDP1 --mode 1024x768 --same-as DP1'
-alias reading-mode='xrandr --output eDP1 --rotate left'
-alias rgb-screen-saver='eog --slide-show ~/Documents/screenfix'
+alias mirror-with-projector="xrandr --output 'DP1' --mode 1024x768 --output /eDP-1' --mode 1024x768 --same-as 'DP1'"
+alias reading-mode='xrandr --output 'eDP-1' --rotate left'
 alias mod-to-alt="sed -i -e '2s/Mod4/Mod1/g' ~/.i3/config & i3-msg reload"
 alias mod-to-super="sed -i -e '2s/Mod1/Mod4/g' ~/.i3/config & i3-msg reload"
-alias restart-wifi='sudo ifconfig wlan0 down; sudo ifconfig wlan0 up'
 alias random-mac='sudo ifconfig wlan0 down; sudo macchanger wlan0 -r; sudo ifconfig wlan0 up'
 alias touchpad-off='synclient TouchpadOff=1'
 alias touchpad-on='synclient TouchpadOff=0'
@@ -217,7 +191,7 @@ source ~/.private-aliases
 # Open new terminal in same directory as last terminal:
 function cd {
         builtin cd $@
-        echo $(pwd) > ~/.last_dir
+        pwd > ~/.last_dir
 }
 if [ -f ~/.last_dir ]; then
         cd "`cat ~/.last_dir`"
@@ -238,13 +212,13 @@ function mugar_print() {
 # Send a script with qsub with "qsub_job myscript.R"
 function qsub_job() {
   jobname=$(basename $1)
-  qsub -P econdept -cwd -m beas -N -b y $jobname $1
+  qsub -P econdept -cwd -m beas -l h_rt=24:00:00 -j y -N $jobname $1
 }
 
 # Same as above but for parallel jobs:
 function qsub_parallel_job() {
   jobname=$(basename $1)
-  qsub -P econdept -pe omp 12 -cwd -m beas -N -b y $jobname $1
+  qsub -P econdept -pe omp 12 -cwd -m beas -l h_rt=48:00:00 -j y -N $jobname $1
 }
 
 function weather() {
@@ -280,6 +254,21 @@ function extract() {
         fi
 }
 
+function preview() {
+  RESOLUTION=`file $1 | grep -oE "[0-9]{3,}x[0-9]{3,}"`
+  WIDTH=`echo $RESOLUTION | cut -d x -f 1`
+  HEIGHT=`echo $RESOLUTION | cut -d x -f 2`
+  ASPECT_RATIO=`echo $WIDTH / $HEIGHT | bc -l`
+  NEW_WIDTH=`echo $(($ASPECT_RATIO * 600))`
+  NEW_WIDTH=`printf '%.0f' "$(($NEW_WIDTH))"`
+  feh -B black -g "$NEW_WIDTH"x600 $1
+}
+
+function makelatex() {
+  latexmk -pdf $1
+  latexmk -c $1
+}
+
 ###############################################################################
 # Setting the prompt
 ###############################################################################
@@ -304,30 +293,6 @@ fi
 setxkbmap -option ctrl:escape
 eval setxkbmap -option caps:escape
 
-if ! [[ -n "$SSH_CLIENT" ]]; then
-        source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
+BASE16_SHELL_SET_BACKGROUND=false
 BASE16_SHELL=$HOME/.config/base16-shell
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
-# xrdb -merge ~/.Xdefaults
-
-# Run with with base16_colorscheme command to sync things up:
-# function colorscheme() {
-#   xrdb -load \
-#     ~/BU-Drive/debian/base16-xresources/xresources/base16-$1-256.Xresources
-#   colorscheme-switcher $1
-#   if [[ "$1" == "mocha" ]]; then
-#     sed -i ~/Dropbox/dotfiles/.vimrc -e \
-#             's/^let g:airline_theme.*$/let g:airline_theme = "term"/g'
-#     cp ~/BU-Drive/debian/prompts/term ~/.powerline-prompt
-#   elif [[ "$1" == "monokai" ]]; then
-#     sed -i ~/Dropbox/dotfiles/.vimrc -e \
-#             's/let g:airline_theme.*$/let g:airline_theme = "wombat"/g'
-#     cp ~/BU-Drive/debian/prompts/wombat ~/.powerline-prompt
-#   elif [[ "$1" == "solarized-light" ]]; then
-#     sed -i ~/Dropbox/dotfiles/.vimrc -e \
-#             's/let g:airline_theme.*$/let g:airline_theme = "solarized"/g'
-#   fi
-# }
-

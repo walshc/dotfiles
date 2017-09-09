@@ -1,5 +1,9 @@
 # Add custom library path:
-.libPaths("~/.local/lib64/R/x86_64-pc-linux-gnu-library/3.2")
+if (grepl("scc", Sys.info()[["nodename"]])) {
+  .libPaths(c("~/.local/lib64/R/x86_64-pc-linux-gnu-library/3.3", .libPaths()))
+} else {
+  .libPaths(c("~/.local/lib64/R/x86_64-pc-linux-gnu-library/3.4", .libPaths()))
+}
 
 # Save command history even if not saving workspace:
 .Last <- function() {
@@ -8,7 +12,7 @@
   }
 }
 Sys.setenv(R_HISTSIZE='100000')
-invisible(Sys.setlocale("LC_ALL", "C"))
+invisible(Sys.setlocale("LC_ALL", ""))
 
 # Invisible environment for functions created here (for interactive use, never
 # use in code):
@@ -39,7 +43,7 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   if (suppressWarnings(require(x, character.only = TRUE))) {
     message("Package ", x, " is already installed.")
   } else {
-    install.packages(x, lib = "~/.local/lib64/R/x86_64-pc-linux-gnu-library/3.2")
+    install.packages(x, lib = "~/.local/lib64/R/x86_64-pc-linux-gnu-library/3.4")
     require(x, character.only = TRUE)
   }
 }
@@ -60,6 +64,7 @@ invisible(Sys.setlocale("LC_ALL", "C"))
 .env$len <- base::length
 .env$lenu <- function(x) length(unique(x))
 .env$su <- function(x) sort(unique(x))
+.env$rtst <- function(x, n) rev(tail(sort(table(x)), n = n))
 
 # head() for matrices: show the first n rows and columns of a matrix
 .env$mh <- function(x, n = 6L) x[1:min(nrow(x), n), 1:min(ncol(x), n)]
@@ -88,6 +93,8 @@ invisible(Sys.setlocale("LC_ALL", "C"))
 }
 
 
+.env$sumna <- function(x) sum(is.na(x))
+
 # pna(x) to get the percentage of NAs in a vector/data.frame
 .env$pna <- function(x) {
   if (is.data.frame(x)) {
@@ -108,6 +115,13 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   require(ggplot2)
   qplot(x, geom = "density", fill = x, xlab = "", ylab = "", alpha = 0.2) +
     theme(legend.position = "none")
+}
+
+# Plot two variables against each other with a red line being a 45 degree line:
+.env$plot45<- function(x, y, a = 0, b = 1, line.color = "red") {
+  require(ggplot2)
+  qplot(x, y, xlab = "", ylab = "") +
+    geom_abline(intercept = a, slope = b, color = line.color)
 }
 
 # Find a variable containing "x" in data.frame df:
@@ -160,6 +174,10 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   plot(x, ...)
   dev.off()
   system("feh --bg-max ~/.tmp.png")
+}
+
+.env$grepv <- function(pattern, x, ...) {
+  grep(pattern, x, ignore.case = TRUE, value = TRUE)
 }
 
 # Drop variables similar to how you can in Stata (with globs/wildcards):
@@ -357,22 +375,36 @@ invisible(Sys.setlocale("LC_ALL", "C"))
   library(x, character.only = TRUE)
 }
 .env$getPrompt <- function(x) {
-  # paste0(gsub("/home/christoph", "~", getwd()), "  ")
-  paste(ifelse(getwd() == "/home/christoph", "~/",
-    rev(strsplit(getwd(), "/")[[1]])[1]), " ")
+  if (grepl("scc", Sys.info()[["nodename"]])) {
+    paste(ifelse(getwd() == "/usr3/graduate/walshcb",
+          paste0("(", Sys.info()[["nodename"]], ") ~/"),
+          paste0("(", Sys.info()[["nodename"]], ") ",
+                 rev(strsplit(getwd(), "/")[[1]])[1], "  ")))
+  } else {
+    paste(ifelse(getwd() == "/home/christoph", "~/",
+          rev(strsplit(getwd(), "/")[[1]])[1]), " ")
+  }
 }
 
 .env$clearWarnings <- function() {
   assign("last.warning", NULL, envir = baseenv())
 }
-attach(.env)
+
+.env$setWidth <- function() {
+  options(width = system("tput cols", intern = TRUE))
+}
+
+.env$setwd <- function(dir) {
+  base::setwd(dir)
+  options(prompt = getPrompt())
+}
+attach(.env, warn.conflicts = FALSE)
 
 # Load up some libraries quietly and set the colorscheme:
 .term <- system("echo $TERM", intern = TRUE)
 .emulator <- system("echo $EMULATOR", intern = TRUE)
 if (interactive()) {
-  invisible(lapply(c("base16colorout", "colorout", "data.table", "ggplot2",
-                     "setwidth"), function(x) {
+  invisible(lapply(c("base16colorout", "colorout", "data.table", "ggplot2"), function(x) {
            suppressPackageStartupMessages(require(x, character.only = TRUE))}))
 }
 base16colorout::base16colorout(paste(utils::read.table("~/.config/colorscheme")$V1),
@@ -417,8 +449,4 @@ for (i in welcome) {
 }
 cat("\n")
 rm(welcome, welcome.chars, i)
-setwd <- function(dir) {
-  base::setwd(dir)
-  options(prompt = getPrompt())
-}
 options(prompt = getPrompt(), continue = " ")
